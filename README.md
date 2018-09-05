@@ -1,50 +1,63 @@
-# webassembly-examples
+# WebAssembly examples
 
-### installation
-```
-https://webassembly.org/getting-started/developers-guide/
+### Resources
+- [WebAssembly Docs](https://webassembly.org/docs/high-level-goals/)
+- [WebAssembly Github](https://github.com/webassembly)
+- [WebAssembly MDN](https://developer.mozilla.org/en-US/docs/WebAssembly)
+- [Awesome Wasm](https://github.com/mbasso/awesome-wasm)
+
+### Tools
+- [WebAssembly Studio](https://webassembly.studio/)
+- [WebAssembly Explorer](https://mbebenita.github.io/WasmExplorer/)
+- [Wat2Wasm](https://cdn.rawgit.com/WebAssembly/wabt/aae5a4b7/demo/wat2wasm/)
+- [Wasm2Wat](https://cdn.rawgit.com/WebAssembly/wabt/aae5a4b7/demo/wasm2wat/)
+
+### Getting started
+
+Create file *module.wat*
+```WebAssembly
+(module
+  ;; calling JavaScript from WebAssembly
+  (import "env" "pow" (func $pow (param f64 f64) (result f64)))
+
+  ;; calling WebAssembly from JavaScript
+  (func (export "add") (param f64 f64) (result f64)
+    (f64.add
+      (get_local 0)
+      (get_local 1)))
+
+  ;; test imported $pow
+  (func (export "test") (param f64 f64) (result f64)
+    (call $pow
+      (get_local 0)
+      (get_local 1)))
+)
 ```
 
-### environment setup after installation
+Convert from WebAssembly text format to the WebAssembly binary format
 ```
-source ./emsdk_env.sh --build=Release
-```
-
-### example C++ code
-```
-#include <emscripten.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-int EMSCRIPTEN_KEEPALIVE add(int a, int b) {
-  return a + b;
-}
-
-#ifdef __cplusplus
-}
-#endif
+wat2wasm module.wat -o module.wasm
 ```
 
-### compile
-```
-emcc -O1 main.cpp -o module.js -s WASM=1 -s ONLY_MY_CODE=1
-```
-
-### web server
+Run a web server
 ```
 python3 -m http.server 8000
 ```
 
-### load and run WebAssembly code
-```
+Load and run WebAssembly code
+```JavaScript
+let importObject = {
+  env: {
+    pow: Math.pow
+  }
+};
+
 fetch('module.wasm').then(response =>
   response.arrayBuffer()
 ).then(bytes =>
-  WebAssembly.instantiate(bytes/*, importObject*/)
+  WebAssembly.instantiate(bytes, importObject)
 ).then(results => {
-  console.log(results.instance.exports);
-  console.log(results.instance.exports._add(3, 4));
+  console.log(results.instance.exports.add(3, 4));
+  console.log(results.instance.exports.test(4, 2));
 });
 ```
