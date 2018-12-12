@@ -61,3 +61,25 @@ fetch('module.wasm').then(response =>
   console.log(results.instance.exports.test(4, 2));
 });
 ```
+
+### Types
+- `i32`: 32-bit integer
+- `i64`: 64-bit integer
+- `f32`: 32-bit floating point
+- `f64`: 64-bit floating point
+
+### Functions
+All code in WebAssembly is grouped into functions
+
+```cpp
+int add(int a, int b) {
+  return a + b;
+}
+```
+
+```WebAssembly
+(func $add (param $a i32) (param $b i32) (result i32)
+  (i32.add
+    (get_local $a)
+    (get_local $b)))
+```
