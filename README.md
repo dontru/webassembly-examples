@@ -83,3 +83,18 @@ int add(int a, int b) {
     (get_local $a)
     (get_local $b)))
 ```
+
+### Operators
+|   | i32 | i64 | f32 | f64 |
+|:-:| --- | --- | --- | --- |
+| + | `add` | `add` | `add` | `add` |
+| - | `sub` | `sub` | `sub` | `sub` |
+| * | `mul` | `mul` | `mul` | `mul` |
+| / | `div_s` | `div_s` | `div` | `div` |
+| % | `rem_s`| `rem_s` | | |
+| == | `eq` | `eq` | `eq` | `eq` |
+| != | `ne` | `ne` | `ne` | `ne` |
+| < | `lt_s` | `lt_s` | `lt` | `lt` |
+| <= | `le_s` | `le_s` | `le` | `le` |
+| > | `gt_s` | `gt_s` | `gt` | `gt` |
+| >= | `ge_s` | `ge_s` | `ge` | `ge` |
