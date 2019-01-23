@@ -84,6 +84,46 @@ int add(int a, int b) {
     (get_local $b)))
 ```
 
+### if...else statement
+
+There are two ways to express `if`...`else` statement
+
+```WebAssembly
+(get_local $condition)
+(if
+  (then
+    ;; statement(s)
+  )
+  (else
+    ;; statement(s)
+  )
+)
+```
+
+```WebAssembly
+(if
+  (get_local $condition)
+  (then
+    ;; statement(s)
+  )
+  (else
+    ;; statement(s)
+  )
+)
+```
+
+`if` can also return a result
+
+```WebAssembly
+(if (result i32)
+  (get_local $condition)
+  (then
+    i32.const 4)
+  (else
+    i32.const 5)
+)
+```
+
 ### Operators
 |   | i32 | i64 | f32 | f64 |
 |:-:| --- | --- | --- | --- |
