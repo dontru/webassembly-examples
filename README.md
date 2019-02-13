@@ -124,6 +124,70 @@ There are two ways to express `if`...`else` statement
 )
 ```
 
+### Blocks of code
+
+- `block`
+- `loop`
+
+`br` is control flow instruction
+
+```WebAssembly
+(block $B0
+  ;; statement(s)
+  (br $B0)        (;  ━┓ ;)
+  ;; statement(s) (;   ┃ ;)
+)                 (;   ┃ ;)
+                  (; <━┛ ;)
+```
+
+```WebAssembly
+(loop $L0         (; <━┓ ;)
+  ;; statement(s) (;   ┃ ;)
+  (br $L0)        (;  ━┛ ;)
+  ;; statement(s)
+)
+```
+
+`br_if` is `br` with a condition
+
+```cpp
+do {
+  // statement(s)
+} while (condition);
+```
+
+```WebAssembly
+(loop $L0
+  ;; statement(s)
+  (br_if $L0
+    (get_local $condition))
+)
+```
+
+Example for loop
+
+```cpp
+for (int i = 0; i < 10; i++) {
+  // statement(s)
+}
+```
+
+```WebAssembly
+(local $i i32)
+(set_local $i
+  (i32.const 0))
+(loop $L0
+  ;; statement(s)
+  (br_if $L0
+    (i32.ne
+      (i32.const 10)
+      (tee_local $i
+        (i32.add
+          (get_local $i)
+          (i32.const 1)))))
+)
+```
+
 ### Operators
 |   | i32 | i64 | f32 | f64 |
 |:-:| --- | --- | --- | --- |
