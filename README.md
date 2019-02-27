@@ -124,6 +124,20 @@ There are two ways to express `if`...`else` statement
 )
 ```
 
+### Ternary operator
+
+```cpp
+condition ? m : n
+```
+
+```WebAssembly
+(select
+  (get_local $m)
+  (get_local $n)
+  (get_local $condition)
+)
+```
+
 ### Blocks of code
 
 - `block`
