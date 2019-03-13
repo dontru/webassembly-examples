@@ -216,3 +216,26 @@ for (int i = 0; i < 10; i++) {
 | <= | `le_s` | `le_s` | `le` | `le` |
 | > | `gt_s` | `gt_s` | `gt` | `gt` |
 | >= | `ge_s` | `ge_s` | `ge` | `ge` |
+
+### Linear Memory
+
+`memory` is a sandboxed array of bytes
+
+```WebAssembly
+(memory $memory 1)
+```
+
+`load` and `store` are used for reading and writing from `memory`
+
+```WebAssembly
+(func $load (param $a i32) (result i32)
+  (i32.load
+    (get_local $a)))
+```
+
+```WebAssembly
+(func $store (param $a i32) (param $b i32)
+  (i32.store
+    (get_local $a)
+    (get_local $b)))
+```
