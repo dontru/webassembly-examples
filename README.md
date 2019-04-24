@@ -1,20 +1,37 @@
 # WebAssembly examples
 
-### Resources
+Getting started with hand-written WebAssembly
+
+- [Resources](#resources)
+- [Tools](#tools)
+- [Getting started](#getting-started)
+- [Types](#types)
+- [Functions](#functions)
+- [if...else statement](#ifelse-statement)
+- [Ternary operator](#ternary-operator)
+- [Blocks of code](#blocks-of-code)
+- [Operators](#operators)
+- [Linear Memory](#linear-memory)
+- [Conversion](#conversion)
+
+## Resources
+
 - [WebAssembly Docs](https://webassembly.org/docs/high-level-goals/)
 - [WebAssembly Github](https://github.com/webassembly)
 - [WebAssembly MDN](https://developer.mozilla.org/en-US/docs/WebAssembly)
 - [Awesome Wasm](https://github.com/mbasso/awesome-wasm)
 
-### Tools
+## Tools
+
 - [WebAssembly Studio](https://webassembly.studio/)
 - [WebAssembly Explorer](https://mbebenita.github.io/WasmExplorer/)
 - [Wat2Wasm](https://cdn.rawgit.com/WebAssembly/wabt/aae5a4b7/demo/wat2wasm/)
 - [Wasm2Wat](https://cdn.rawgit.com/WebAssembly/wabt/aae5a4b7/demo/wasm2wat/)
 
-### Getting started
+## Getting started
 
 Create file *module.wat*
+
 ```WebAssembly
 (module
   ;; calling JavaScript from WebAssembly
@@ -35,16 +52,19 @@ Create file *module.wat*
 ```
 
 Convert from WebAssembly text format to the WebAssembly binary format
+
 ```
 wat2wasm module.wat -o module.wasm
 ```
 
 Run a web server
+
 ```
 python3 -m http.server 8000
 ```
 
 Load and run WebAssembly code
+
 ```JavaScript
 let importObject = {
   env: {
@@ -62,13 +82,15 @@ fetch('module.wasm').then(response =>
 });
 ```
 
-### Types
+## Types
+
 - `i32`: 32-bit integer
 - `i64`: 64-bit integer
 - `f32`: 32-bit floating point
 - `f64`: 64-bit floating point
 
-### Functions
+## Functions
+
 All code in WebAssembly is grouped into functions
 
 ```cpp
@@ -84,7 +106,7 @@ int add(int a, int b) {
     (get_local $b)))
 ```
 
-### if...else statement
+## if...else statement
 
 There are two ways to express `if`...`else` statement
 
@@ -124,7 +146,7 @@ There are two ways to express `if`...`else` statement
 )
 ```
 
-### Ternary operator
+## Ternary operator
 
 ```cpp
 condition ? m : n
@@ -138,7 +160,7 @@ condition ? m : n
 )
 ```
 
-### Blocks of code
+## Blocks of code
 
 - `block`
 - `loop`
@@ -202,7 +224,8 @@ for (int i = 0; i < 10; i++) {
 )
 ```
 
-### Operators
+## Operators
+
 |   | i32 | i64 | f32 | f64 |
 |:-:| --- | --- | --- | --- |
 | + | `add` | `add` | `add` | `add` |
@@ -217,7 +240,7 @@ for (int i = 0; i < 10; i++) {
 | > | `gt_s` | `gt_s` | `gt` | `gt` |
 | >= | `ge_s` | `ge_s` | `ge` | `ge` |
 
-### Linear Memory
+## Linear Memory
 
 `memory` is a sandboxed array of bytes
 
@@ -240,73 +263,8 @@ for (int i = 0; i < 10; i++) {
     (get_local $b)))
 ```
 
-### Conversion
+## Conversion
 
-```WebAssembly
-(func $i64_to_i32 (param i64) (result i32)
-  (i32.wrap/i64
-    (get_local 0)))
-
-(func $f32_to_i32 (param f32) (result i32)
-  (i32.trunc_s/f32
-    (get_local 0)))
-
-(func $f64_to_i32 (param f64) (result i32)
-  (i32.trunc_s/f64
-    (get_local 0)))
-
-(func $i32_to_i64 (param i32) (result i64)
-  (i64.extend_s/i32
-    (get_local 0)))
-
-(func $f32_to_i64 (param f32) (result i64)
-  (i64.trunc_s/f32
-    (get_local 0)))
-
-(func $f64_to_i64 (param f64) (result i64)
-  (i64.trunc_s/f64
-    (get_local 0)))
-
-(func $i32_to_f32 (param i32) (result f32)
-  (f32.convert_s/i32
-    (get_local 0)))
-
-(func $i64_to_f32 (param i64) (result f32)
-  (f32.convert_s/i64
-    (get_local 0)))
-
-(func $f64_to_f32 (param f64) (result f32)
-  (f32.demote/f64
-    (get_local 0)))
-
-(func $i32_to_f64 (param i32) (result f64)
-  (f64.convert_s/i32
-    (get_local 0)))
-
-(func $i64_to_f64 (param i64) (result f64)
-  (f64.convert_s/i64
-    (get_local 0)))
-
-(func $f32_to_f64 (param f32) (result f64)
-  (f64.promote/f32
-    (get_local 0)))
-
-(func $i32_to_bool (param i32) (result i32)
-  (i32.ne
-    (get_local 0)
-    (i32.const 0)))
-
-(func $i32_to_i8 (param i32) (result i32)
-  (i32.shr_s
-    (i32.shl
-      (get_local 0)
-      (i32.const 24))
-    (i32.const 24)))
-
-(func $i32_to_i16 (param i32) (result i32)
-  (i32.shr_s
-    (i32.shl
-      (get_local 0)
-      (i32.const 16))
-    (i32.const 16)))
-```
+Methods used for conversion:
+`wrap`, `trunc_s`, `extend_s`, `convert_s`, `demote`, `promote`  
+[Examples](src/conversion.wat)
