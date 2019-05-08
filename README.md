@@ -153,6 +153,14 @@ condition ? m : n
 ```
 
 ```WebAssembly
+(get_local $condition)
+(select
+  (get_local $m)
+  (get_local $n)
+)
+```
+
+```WebAssembly
 (select
   (get_local $m)
   (get_local $n)
